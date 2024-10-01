@@ -1,7 +1,9 @@
 import React from 'react';
 import Button from './components/web/Button.web';
+import Expo from 'expo'
 
-const App = () => {
+
+const AppWeb = () => {
   const handlePress = () => {
     alert('Button pressed on web!');
   };
@@ -9,4 +11,4 @@ const App = () => {
   return <Button title="Click Me" onPress={handlePress} />;
 };
 
-export default App;
+export default AppWeb;

@@ -1,14 +1,9 @@
 import React from 'react';
-import Button from './components/web/Button.web';
-import Expo from 'expo'
-
+import MainScreen from './screens/mainScreen';
+import './styles/globals.css';
 
 const AppWeb = () => {
-  const handlePress = () => {
-    alert('Button pressed on web!');
-  };
-
-  return <Button title="Click Me" onPress={handlePress} />;
+  return <MainScreen/>;
 };
 
 export default AppWeb;

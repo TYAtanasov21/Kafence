@@ -1,18 +1,32 @@
-// src/App.tsx (for mobile)
+import './styles/globals.css';
 import React from 'react';
-import { SafeAreaView } from 'react-native';
-import Button from './components/mobile/Button.native'; // Mobile-specific import
+import { StyleSheet, Text, View, Button, Alert } from 'react-native';
 
-const App = () => {
+const App: React.FC = () => {
   const handlePress = () => {
-    alert('Button pressed on mobile!');
+    Alert.alert('Button pressed!');
   };
 
   return (
-    <SafeAreaView>
-      <Button title="Click Me" onPress={handlePress} />
-    </SafeAreaView>
+    <View style={styles.container}>
+      <Text style={styles.title}>Welcome to My React Native App!</Text>
+      <Button title="Press Me" onPress={handlePress} />
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f5f5f5',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+});
 
 export default App;

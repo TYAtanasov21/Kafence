@@ -1,6 +1,5 @@
-// src/components/TopBar.tsx
 import React from 'react';
-import { TopBarProps } from '../shared/TopBar';
+import {TopBarProps}  from '../shared/TopBar';
 import Feather from '@expo/vector-icons/Feather';
 
 const TopBar: React.FC<TopBarProps> = ({ title, onSignInPress }) => {
@@ -13,7 +12,6 @@ const TopBar: React.FC<TopBarProps> = ({ title, onSignInPress }) => {
         className="pt-6"
       />
 
-      {/* Sign-In Icon */}
       <button onClick={onSignInPress} className="p-2">
         <span className="material-icons text-black">
             <Feather name="user" size={43} color="black" />

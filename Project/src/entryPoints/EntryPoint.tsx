@@ -1,5 +1,5 @@
 import { registerRootComponent } from 'expo';
-import App from '../App';
+import {App} from '../App';
 import AppWeb from '../App.web';
 import { Platform } from 'react-native';
 

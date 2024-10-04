@@ -1,9 +1,19 @@
 import './styles/globals.css';
 import React from 'react';
-import MainScreen from './screens/mainScreen';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
-const AppWeb = () => {
-  return <MainScreen/>;
+import HomeScreen from './screens/mainScreen';
+import LogIn from './screens/Login.web';
+
+const App = () => {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomeScreen />} />
+        <Route path="/login" element={<LogIn />} />
+      </Routes>
+    </Router>
+  );
 };
 
-export default AppWeb;
+export default App;

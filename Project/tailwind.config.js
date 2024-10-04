@@ -8,7 +8,11 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'my-orange': '#FAF7F0'
+        'my-orange': '#FAF7F0',
+        'my-black': '#4A4947',
+      },
+      fontFamily: {
+        customFont: ['Roboto', 'sans-serif'], 
       },
     },
   },

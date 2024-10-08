@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@expo/metro-runtime": "~3.2.3",
+    "@react-google-maps/api": "^2.19.3",
+    "dotenv": "^16.4.5",
     "expo": "latest",
     "expo-status-bar": "~1.12.1",
     "react": "18.2.0",

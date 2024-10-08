@@ -7,7 +7,10 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "extra": {
-      "googleMapsApiKey": "${GOOGLE_MAPS_API_KEY}"
+      "googleMapsApiKey": "${GOOGLE_MAPS_API_KEY}",
+      "googleClientID": "128280900536-knjnbpuaeac1k6gcrg1aap8koakiu9od.apps.googleusercontent",
+      "googleClientSecret": "${GOOGLE_CLIENT_SECRET}"
+
     },
     "splash": {
       "image": "./assets/splash.png",

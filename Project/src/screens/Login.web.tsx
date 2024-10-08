@@ -1,7 +1,7 @@
 import React from 'react';
-
+import GoogleLoginComponent from '../components/web/GoogleLogin.web';
 const LogIn: React.FC = () => {
-  return <h1 className = "text-5xl flex flex-1 justify-center items-center">this is the login page</h1>;
+  return <GoogleLoginComponent/>;
 };
 
 export default LogIn;

@@ -8,7 +8,7 @@
     "userInterfaceStyle": "light",
     "extra": {
       "googleMapsApiKey": "${GOOGLE_MAPS_API_KEY}",
-      "googleClientID": "128280900536-knjnbpuaeac1k6gcrg1aap8koakiu9od.apps.googleusercontent",
+      "googleClientID": "${GOOGLE_CLIENT_ID}",
       "googleClientSecret": "${GOOGLE_CLIENT_SECRET}"
 
     },

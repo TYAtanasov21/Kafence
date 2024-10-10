@@ -39,10 +39,10 @@ const GoogleLoginComponent: React.FC = () => {
     }
     return null;
   };
+  
   return (
 <GoogleOAuthProvider clientId={client_id}>
   <div>
-    <h2>Login with Google</h2>
     <GoogleLogin
       theme="outline"
       size="large"

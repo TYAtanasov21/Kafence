@@ -1,6 +1,7 @@
 import React from 'react';
 import { GoogleMap, LoadScript } from '@react-google-maps/api';
-import Constants from 'expo-constants';
+
+
 
 const mapContainerStyle = {
   width: '60%',
@@ -13,8 +14,7 @@ const center = {
 };
 
 const GoogleMapsComponent: React.FC = () => {
-  const apiKey = Constants.expoConfig?.extra?.googleMapsApiKey;
-
+  const apiKey = process.env.GOOGLE_MAPS_API;  
   return (
     <LoadScript googleMapsApiKey={apiKey}>
       <GoogleMap

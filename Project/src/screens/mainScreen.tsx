@@ -2,19 +2,43 @@ import React from "react";
 import TopBar from "../components/web/TopBar.web";
 import GoogleMapsComponent from "../components/web/GoogleMap.web";
 
-const MainScreenWeb: React.FC = () =>  {
-
-  const handleSignInPress = () => {
-  };
+const MainScreenWeb: React.FC = () => {
+  const handleSignInPress = () => {};
 
   return (
-    <div className="bg-my-orange w-screen h-screen flex flex-col">
+    <div className="bg-my-orange min-h-screen flex flex-col overflow-auto">
       <TopBar title="Kafence" onSignInPress={handleSignInPress} />
-        
+
       <div className="flex flex-col justify-center items-center p-5">
-        <h1 className="text-center text-5xl font-bold text-my-black font-customFont pb-5">Обичаш кафе?</h1>
-        <h3 className = "text-center text-3xl font-semibold text-my-black font-customFont pb-10">Намери най близката кафе машина в района ти за секунди!</h3>
-        <GoogleMapsComponent/>
+        <h1 className="text-center text-5xl font-bold text-my-black font-customFont pb-5">
+          Обичаш кафе?
+        </h1>
+        <h3 className="text-center text-3xl font-semibold text-my-black font-customFont pb-16">
+          Намери най близката кафе машина в района ти за секунди!
+        </h3>
+        <GoogleMapsComponent />
+      </div>
+
+      <div className="flex flex-row justify-between p-12 mx-10">
+        <div className="flex flex-col flex-1 items-center justify-center">
+          <p className="text-3xl font-bold text-my-black font-customFont mb-4">
+            Още за Кафенце!
+          </p>
+          <p className="text-xl text-my-black font-customFont text-center leading-9 tracking-wide">
+            В съвременния свят любовта ви към кафето не трябва да бъде жертвана
+            заради натовареното ежедневие. Независимо дали сте фен на италианско
+            еспресо или предпочитате топло капучино, сега е по-лесно от всякога
+            да намерите идеалната кафемашина.
+          </p>
+        </div>
+
+        <div className="flex-1 flex justify-end mx-10">
+          <img
+            src="../../assets/coffee_cup.png"
+            alt="coffee image"
+            className="max-w-full h-auto"
+          />
+        </div>
       </div>
     </div>
   );

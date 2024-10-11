@@ -10,7 +10,10 @@ module.exports = {
       colors: {
         'my-orange': '#FAF7F0',
         'my-black': '#4A4947',
-        'my-purple': '#8181FF'
+        'my-purple': '#8181FF',
+        'my-beige': '#D8D2C2',
+        'my-brown': "#B17457",
+        'my-brown-darker': '#562F1C'
       },
       fontFamily: {
         customFont: ['Roboto', 'sans-serif'], 

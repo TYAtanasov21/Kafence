@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { GoogleOAuthProvider, GoogleLogin, CredentialResponse } from '@react-oauth/google';
 import { FaMicrosoft, FaApple } from 'react-icons/fa';
-
+import axios from 'axios';
 interface UserObject {
   id: string;
   name: string;
@@ -36,11 +36,26 @@ const LogIn: React.FC = () => {
     setPassword('');
   };
 
+  const getUser = (user: UserObject) => {
+    axios.get('http://localhost:5000/user/getUser', {
+      params: {
+          user: user
+      }
+  })
+  .then(response => {
+      console.log(response.data);
+  })
+  .catch(error => {
+      console.error('Error:', error);
+  });
+  }
+
   const onSuccess = (credentialResponse: CredentialResponse) => {
     if (credentialResponse.credential) {
       const userProfile = parseJwt(credentialResponse.credential);
       if (userProfile) {
         setUser(userProfile);
+        getUser(user);
         console.log('Login Success: current user:', userProfile);
       } else {
         console.error('Failed to parse user profile');

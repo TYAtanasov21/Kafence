@@ -1,6 +1,7 @@
 import React from "react";
 import TopBar from "../components/web/TopBar.web";
 import GoogleMapsComponent from "../components/web/GoogleMap.web";
+import AddMachineForm from "../components/web/AddMachineForm.web";
 
 const MainScreenWeb: React.FC = () => {
   const handleSignInPress = () => {};
@@ -39,6 +40,9 @@ const MainScreenWeb: React.FC = () => {
             className="max-w-full h-auto"
           />
         </div>
+      </div>
+      <div className = "w-full max-w-full">
+      <AddMachineForm/>
       </div>
     </div>
   );

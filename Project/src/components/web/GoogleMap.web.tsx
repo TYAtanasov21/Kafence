@@ -65,12 +65,19 @@ const GoogleMapsComponent: React.FC = () => {
                 pixelOffset: new window.google.maps.Size(0, -30), // Adjust position above marker
               }}
             >
-              <div className = "bg-slate-600">
-                <h2>Marker Info</h2>
-                <p>Details about the marker.</p>
-                <button onClick={handleButtonClick} style={{ marginTop: '10px', padding: '5px 10px', backgroundColor: '#4CAF50', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
+              <div className = "bg-white flex flex-col ">
+                <div>
+                  <h1 className = "text-lg font-semibold">Фердинандова 13</h1>
+                  <p className = "text-lg">Рейтинг: 4.7 звезди (20)</p>
+                  <p className = "text-lg">Работи: 24 часа</p>
+                  <p className = "text-lg">Марка на машината: Lavazza</p>
+                </div>
+                <div className = "flex flex-row justify-between pt-5"> 
+                <p className = "text-lg">🏃‍♂️ 5 минути пеша</p>
+                <button onClick={handleButtonClick} style={{padding: '5px 10px', backgroundColor: '#4CAF50', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
                   Click Me
                 </button>
+                </div>
               </div>
             </InfoWindow>
           )}

@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { GoogleOAuthProvider, GoogleLogin, CredentialResponse } from '@react-oauth/google';
 import { FaMicrosoft, FaApple } from 'react-icons/fa';
 import axios from 'axios';
+import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 interface UserObject {
   id: string;
   name: string;
@@ -29,14 +30,13 @@ const LogIn: React.FC = () => {
 
     // Simulate an API call for sign-in
     console.log('Email:', email);
-    console.log('Password:', password);
-
-    // Reset form fields
+    console.log('Password:', password);    // Reset form fields
     setEmail('');
     setPassword('');
+    
   };
 
-  const getUser = (user: UserObject) => {
+  const getUser = (user: any) => {
     axios.get('http://localhost:5000/user/getUser', {
       params: {
           user: user
@@ -55,7 +55,6 @@ const LogIn: React.FC = () => {
       const userProfile = parseJwt(credentialResponse.credential);
       if (userProfile) {
         setUser(userProfile);
-        getUser(user);
         console.log('Login Success: current user:', userProfile);
       } else {
         console.error('Failed to parse user profile');
@@ -79,6 +78,13 @@ const LogIn: React.FC = () => {
     return null;
   };
 
+  // useEffect(() =>{
+  //   getUser(user);
+  // }, [user]);
+
+  const getUserSubmit = () => {
+    getUser({email:email, password:password})
+  }
   return (
     <GoogleOAuthProvider clientId={client_id}>
       <div className="flex flex-col items-center justify-center min-h-screen w-full bg-my-orange">
@@ -119,10 +125,14 @@ const LogIn: React.FC = () => {
               />
             </div>
             <button
+              onClick={(e) => {
+                e.preventDefault(); // Prevents the default form submit behavior
+                getUserSubmit();
+              }}
               type="submit"
               className="w-full py-2 px-4 bg-my-brown text-white font-semibold rounded-md hover:bg-my-brown-darker transition font-customFont"
             >
-              Sign In
+              Submit
             </button>
           </form>
 

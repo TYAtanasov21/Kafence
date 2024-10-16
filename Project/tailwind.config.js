@@ -11,7 +11,7 @@ module.exports = {
         'my-orange': '#FAF7F0',
         'my-black': '#4A4947',
         'my-purple': '#8181FF',
-        'my-purple-darker': '4C4CB0',
+        'my-purple-darker': '#4C4CB0',
         'my-beige': '#D8D2C2',
         'my-brown': "#B17457",
         'my-brown-darker': '#562F1C'

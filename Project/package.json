@@ -9,6 +9,8 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@azure/msal-browser": "^3.26.1",
+    "@azure/msal-react": "^2.1.1",
     "@expo/metro-runtime": "~3.2.3",
     "@react-google-maps/api": "^2.19.3",
     "@react-oauth/google": "^0.12.1",

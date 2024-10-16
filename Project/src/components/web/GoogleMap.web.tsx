@@ -17,19 +17,22 @@ const mapId = '481bfcc0fdf44c5f';
 
 const GoogleMapsComponent: React.FC = () => {
   const apiKey = process.env.GOOGLE_MAPS_API;
-  const MarkerIcon = "https://img.icons8.com/ios-filled/50/000000/coffee.png"; // Coffee icon
+  const MarkerIcon = "https://img.icons8.com/ios-filled/50/000000/coffee.png"; 
 
-  const [selected, setSelected] = useState<google.maps.LatLng | null>(null); // State to manage selected marker
-  const [isLoaded, setIsLoaded] = useState(false); // State to check if Google Maps is loaded
+  const [selected, setSelected] = useState<google.maps.LatLng | null>(null); 
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const handleMarkerClick = (position: google.maps.LatLng) => {
     setSelected(position);
   };
 
-  const handleButtonClick = () => {
-    alert("Button clicked!"); // Replace this with your desired action
+  const handleRate = () => {
+    alert("Button clicked!");
   };
 
+  const handleMapsButtonClicked = () => {
+    alert("Google maps button clicked!");
+  }
   const handleLoad = () => {
     setIsLoaded(true);
   };
@@ -72,9 +75,22 @@ const GoogleMapsComponent: React.FC = () => {
                   <p className = "text-lg">Марка на машината: Lavazza</p>
                 </div>
                 <div className = "flex flex-row justify-between pt-5"> 
-                <p className = "text-lg">🏃‍♂️ 5 минути пеша</p>
-                <button onClick={handleButtonClick} style={{padding: '5px 10px', backgroundColor: '#4CAF50', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
-                  Click Me
+                <p className = "text-lg ">🏃‍♂️ 5 минути пеша</p>
+                <button 
+                  onClick={handleMapsButtonClicked} 
+                  className = "py-2 px-2 bg-green-400 border-none rounded-md cursor-pointer  ml-10 mr-3"
+                  >
+                  <img
+                    src="../../assets/google-maps-icon.png"
+                    alt="Google maps logo"
+                    style={{ width: "20px", height: "20px" }}
+                  />
+                </button>
+                <button 
+                  onClick={handleRate} 
+                  className = "py-2 px-3 bg-my-purple text-white font-bold text-md border-none rounded-md cursor-pointer"
+                  >
+                  Rate
                 </button>
                 </div>
               </div>

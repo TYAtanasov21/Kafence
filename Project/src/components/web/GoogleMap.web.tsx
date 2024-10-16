@@ -33,7 +33,6 @@ const GoogleMapsComponent: React.FC = () => {
   const handleLoad = () => {
     setIsLoaded(true);
   };
-  console.log(process.env.GOOGLE_MAPS_API);
 
   return (
     <LoadScript googleMapsApiKey={apiKey} onLoad={handleLoad}>

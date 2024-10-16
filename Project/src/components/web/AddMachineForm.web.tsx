@@ -94,9 +94,9 @@ const AddMachineForm: React.FC = () => {
       <div>
         <button
           type="submit"
-          className="w-full bg-my-purple hover:bg-my-purple text-white font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline h-12"
+          className="w-full bg-my-purple hover:bg-my-purple-darker text-white font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline h-12"
         >
-          Submit
+          Изпращане на запитване
         </button>
       </div>
     </form>

@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { GoogleOAuthProvider, GoogleLogin, CredentialResponse } from '@react-oauth/google';
 import { FaMicrosoft, FaApple } from 'react-icons/fa';
-import axios from 'axios';
-import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
+import { useMsal } from '@azure/msal-react'; // Import the MSAL hook
+import { InteractionType } from '@azure/msal-browser'; // For popup login
+
 interface UserObject {
   id: string;
   name: string;
@@ -11,8 +12,9 @@ interface UserObject {
 }
 
 const LogIn: React.FC = () => {
-  const client_id = process.env.GOOGLE_CLIENT_ID;
+  const googleClientId = process.env.GOOGLE_CLIENT_ID;
 
+  const { instance } = useMsal();  // MSAL instance from the provider
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -22,35 +24,18 @@ const LogIn: React.FC = () => {
     event.preventDefault();
     setErrorMessage('');
 
-    // Basic validation
     if (!email || !password) {
       setErrorMessage('Please enter your email and password.');
       return;
     }
 
-    // Simulate an API call for sign-in
     console.log('Email:', email);
-    console.log('Password:', password);    // Reset form fields
+    console.log('Password:', password);
     setEmail('');
     setPassword('');
-    
   };
 
-  const getUser = (user: any) => {
-    axios.get('http://localhost:5000/user/getUser', {
-      params: {
-          user: user
-      }
-  })
-  .then(response => {
-      console.log(response.data);
-  })
-  .catch(error => {
-      console.error('Error:', error);
-  });
-  }
-
-  const onSuccess = (credentialResponse: CredentialResponse) => {
+  const onGoogleSuccess = (credentialResponse: CredentialResponse) => {
     if (credentialResponse.credential) {
       const userProfile = parseJwt(credentialResponse.credential);
       if (userProfile) {
@@ -64,8 +49,29 @@ const LogIn: React.FC = () => {
     }
   };
 
-  const onError = () => {
-    console.error('Login failed: An error occurred during authentication');
+  const onGoogleError = () => {
+    console.error('Login failed: An error occurred during Google authentication');
+  };
+
+  const handleMicrosoftLogin = () => {
+    instance.loginPopup({
+      scopes: ['User.Read'], // Customize your scopes here
+      prompt: 'select_account',
+    })
+      .then((response) => {
+        console.log('Microsoft Login Success:', response);
+        const { idTokenClaims } = response;
+        const userProfile: UserObject = {
+          id: idTokenClaims?.oid ?? '',
+          name: idTokenClaims?.name ?? '',
+          email: idTokenClaims?.preferred_username ?? '',
+          picture: idTokenClaims?.picture ?? '',
+        };
+        setUser(userProfile);
+      })
+      .catch((error) => {
+        console.error('Microsoft Login Failed:', error);
+      });
   };
 
   const parseJwt = (token: string) => {
@@ -78,15 +84,8 @@ const LogIn: React.FC = () => {
     return null;
   };
 
-  // useEffect(() =>{
-  //   getUser(user);
-  // }, [user]);
-
-  const getUserSubmit = () => {
-    getUser({email:email, password:password})
-  }
   return (
-    <GoogleOAuthProvider clientId={client_id}>
+    <GoogleOAuthProvider clientId={googleClientId}>
       <div className="flex flex-col items-center justify-center min-h-screen w-full bg-my-orange">
         <div className="pb-20">
           <img src="../../assets/logo-web-page.png" alt="logo" />
@@ -125,14 +124,10 @@ const LogIn: React.FC = () => {
               />
             </div>
             <button
-              onClick={(e) => {
-                e.preventDefault(); // Prevents the default form submit behavior
-                getUserSubmit();
-              }}
               type="submit"
               className="w-full py-2 px-4 bg-my-brown text-white font-semibold rounded-md hover:bg-my-brown-darker transition font-customFont"
             >
-              Submit
+              Sign In
             </button>
           </form>
 
@@ -142,10 +137,10 @@ const LogIn: React.FC = () => {
             <hr className="w-full border-gray-300" />
           </div>
 
-          <div className="flex flex-col items-center justify-center gap-4"> {/* Center the buttons */}
+          <div className="flex flex-col items-center justify-center gap-4"> 
             <GoogleLogin
-              onSuccess={onSuccess}
-              onError={onError}
+              onSuccess={onGoogleSuccess}
+              onError={onGoogleError}
               theme="filled_black"
               text="continue_with"
               type="standard"
@@ -153,7 +148,7 @@ const LogIn: React.FC = () => {
             />
 
             <button
-              onClick={() => console.log('Signing in with Microsoft...')}
+              onClick={handleMicrosoftLogin}
               className="flex items-center justify-center w-full bg-white text-black font-semibold rounded-md hover:bg-my-beige transition py-2 text-xl font-customFont"
             >
               <FaMicrosoft size='25' className="mr-2" />

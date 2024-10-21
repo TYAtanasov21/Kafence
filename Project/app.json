@@ -1,6 +1,7 @@
 {
   "expo": {
     "name": "Кафенце",
+
     "slug": "project",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -25,7 +26,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "jsEngine": "jsc"
     },
     "web": {      
       "favicon": "./assets/icon.png"

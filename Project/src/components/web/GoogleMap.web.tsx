@@ -99,8 +99,15 @@ const GoogleMapsComponent: React.FC = () => {
                 </div>
                 <div className="flex flex-row justify-between pt-5"> 
                   <p className="text-lg">🏃‍♂️ 5 минути пеша</p>
-                  <button 
-                    onClick={() => alert("Google maps button clicked!")} 
+                  <button
+                    onClick={() => {
+                      if (selected) {
+                        const lat = selected.lat;
+                        const lng = selected.lng; 
+                        const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=walking`;
+                        window.open(url, '_blank');
+                      }
+                    }}
                     className="py-2 px-2 bg-green-400 border-none rounded-md cursor-pointer ml-10 mr-3"
                   >
                     <img
@@ -109,6 +116,7 @@ const GoogleMapsComponent: React.FC = () => {
                       style={{ width: "20px", height: "20px" }}
                     />
                   </button>
+
                   <button 
                     onClick={handleRate} 
                     className="py-2 px-3 bg-my-purple text-white font-bold text-md border-none rounded-md cursor-pointer"

@@ -1,27 +1,20 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
-import { TopBarProps } from '../shared/TopBar'; // Adjust path if necessary
+import { TopBarProps } from '../shared/TopBar';
+import tailwind from 'twrnc';
+import Feather from '@expo/vector-icons/Feather';
 
 const TopBarMobile: React.FC<TopBarProps> = ({ title, onSignInPress }) => {
   return (
-    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', height: 60, backgroundColor: '#6200ee', paddingHorizontal: 16 }}>
+    <View style={tailwind`flex flex-row items-center justify-between pt-12 px-3 w-full`}>
       <Image
-        source={require('../../../assets/logo-web-page.png')} // Make sure this image path is correct
-        style={{ width: 96, height: 40 }}
+        source={require('../../../assets/logo-web-page.png')}
+        style={{ width: 150, height: 62 }}
         resizeMode="contain"
       />
 
-      {/* Title */}
-      {title && (
-        <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>
-          {title}
-        </Text>
-      )}
-
-      {/* Sign-In Icon */}
-      <TouchableOpacity onPress={onSignInPress}>
-        {/* Wrap the emoji in a Text component */}
-        <Text style={{ color: 'white', fontSize: 24 }}>🔑</Text>
+      <TouchableOpacity onPress={onSignInPress} style={tailwind`justify-center`}>
+        <Feather name="user" size={35} />
       </TouchableOpacity>
     </View>
   );

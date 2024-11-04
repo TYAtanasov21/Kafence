@@ -9,7 +9,9 @@ const mapContainerStyle = {
 const mapId = '481bfcc0fdf44c5f';
 
 const GoogleMapsComponent: React.FC = () => {
-  const apiKey = process.env.GOOGLE_MAPS_API;
+  
+  const apiKey = "AIzaSyCuY-4rBKZ28zMvIkuAglx5G-P_o3nsnAc";
+  console.log(apiKey);
   const MarkerIcon = "https://img.icons8.com/ios-filled/50/000000/coffee.png"; 
 
   const [selected, setSelected] = useState<google.maps.LatLng | null>(null); 

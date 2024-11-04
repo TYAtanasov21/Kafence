@@ -1,8 +1,8 @@
 import React from "react";
-import TopBar from "../components/web/TopBar.web";
-import GoogleMapsComponent from "../components/web/GoogleMap.web";
-import AddMachineForm from "../components/web/AddMachineForm.web";
-import Footer from "../components/web/Footer.web";
+import TopBar from "../../components/web/TopBar.web";
+import GoogleMapsComponent from "../../components/web/GoogleMap.web";
+import AddMachineForm from "../../components/web/AddMachineForm.web";
+import Footer from "../../components/web/Footer.web";
 
 const MainScreenWeb: React.FC = () => {
   const handleSignInPress = () => {};

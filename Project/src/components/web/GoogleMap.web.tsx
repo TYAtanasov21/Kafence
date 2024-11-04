@@ -1,16 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/api';
+import axios from 'axios';
 
 const mapContainerStyle = {
   width: '60%',
   height: '600px',
 };
 
+interface MachineProps {
+  long: number;
+  lat: number;
+  name: string;
+  id: number;
+}
+
 const mapId = '481bfcc0fdf44c5f';
 
 const GoogleMapsComponent: React.FC = () => {
   
-  const apiKey = "AIzaSyCuY-4rBKZ28zMvIkuAglx5G-P_o3nsnAc";
+  const apiKey = process.env.GOOGLE_MAPS_API;
   console.log(apiKey);
   const MarkerIcon = "https://img.icons8.com/ios-filled/50/000000/coffee.png"; 
 
@@ -19,7 +27,7 @@ const GoogleMapsComponent: React.FC = () => {
   const [ratingModalVisible, setRatingModalVisible] = useState(false);
   const [rating, setRating] = useState(0);
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
-
+  const [machines, setMachines] = useState<MachineProps[]>([]);
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -38,6 +46,29 @@ const GoogleMapsComponent: React.FC = () => {
     setSelected(position);
   };
 
+  useEffect(() => {
+    const fetchMachines = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/machine/getMachines');
+        const machinesArray = response.data.array;
+        setMachines(machinesArray);
+      } catch (error) {
+        console.log("Error fetching machines: ", error);
+      }
+    };
+
+    fetchMachines();
+  }, []);
+
+  // Log the machines sate after it updates
+  useEffect(() => {
+    console.log(machines, "updated machines");
+    if (machines.length > 0) { // Check if the machines array is not empty
+      console.log(typeof Number(machines[0].lat)); // Now safe to access machines[0].lat
+    } else {
+      console.log("Machines array is empty."); // Log message for empty array
+    }
+  }, [machines]);
   const handleRate = () => {
     setRatingModalVisible(true);
   };
@@ -72,18 +103,19 @@ const GoogleMapsComponent: React.FC = () => {
               }} 
             />
           )}
-
-          <Marker 
-            position={{ lat: 42.4975, lng: 27.4700 }} 
-            title="Coffee Machine"
-            label="A"
-            onClick={() => handleMarkerClick({ lat: 42.4975, lng: 27.4700 })}
-            icon={{
-              url: MarkerIcon, 
-              scaledSize: new window.google.maps.Size(40, 40),
-            }} 
-          />
-
+          {
+          machines && machines.length > 0 && machines.map((machine, index) => (
+            <Marker 
+              position={{ lat: Number(machine.long), lng: Number(machine.lat)}} 
+              title="Coffee Machine"
+              label="A"
+              onClick={() => handleMarkerClick(new google.maps.LatLng(Number(machine.long), Number(machine.lat)))}
+              icon={{
+                url: MarkerIcon, 
+                scaledSize: new window.google.maps.Size(40, 40),
+              }} 
+            />
+          ))}
           {selected && (
             <InfoWindow
               position={selected}

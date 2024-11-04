@@ -26,7 +26,8 @@ router.get('/getMachines', async (req, res) =>{
     try{
         const client = await pool.connect();
         const response = await client.query("SELECT * FROM machines");
-        console.log(response.rows);
+        const data = response.rows
+        res.status(200).json({array:data});
     }
     catch(error) {
         console.log(error);

@@ -1,8 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Modal, Button, TouchableOpacity } from 'react-native';
+import { View, Text, Modal, Button, TouchableOpacity, Linking } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import tailwind from 'twrnc';
 import TopBarMobile from "../../components/mobile/TopBar.mobile";
+
+interface CoffeeMachine {
+    lat: number;
+    lng: number;
+    title: string;
+    description: string;
+    rating: number;
+    brand: string;
+}
 
 export const MainScreenMobile: React.FC = () => {
     const handleSignInPress = () => {
@@ -21,13 +30,13 @@ export const MainScreenMobile: React.FC = () => {
     };
 
     const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
-    const [selectedMarker, setSelectedMarker] = useState<{ lat: number; lng: number } | null>(null);
+    const [selectedMarker, setSelectedMarker] = useState<CoffeeMachine | null>(null);
     const [modalVisible, setModalVisible] = useState(false);
     const [ratingModalVisible, setRatingModalVisible] = useState(false);
     const [rating, setRating] = useState(0);
 
     // Hardcoded coffee machine locations for demonstration
-    const coffeeMachines = [
+    const coffeeMachines: CoffeeMachine[] = [
         { lat: 42.4975, lng: 27.4700, title: "Coffee Machine A", description: "Фердинандова 13", rating: 4.7, brand: "Lavazza" },
         { lat: 42.5000, lng: 27.4600, title: "Coffee Machine B", description: "ул. Мостова 7", rating: 4.5, brand: "Nespresso" },
         // Add more machines as needed
@@ -47,7 +56,7 @@ export const MainScreenMobile: React.FC = () => {
         }
     }, []);
 
-    const handleMarkerPress = (marker) => {
+    const handleMarkerPress = (marker: CoffeeMachine) => {
         setSelectedMarker(marker);
         setModalVisible(true);
     };
@@ -59,6 +68,7 @@ export const MainScreenMobile: React.FC = () => {
 
     const handleRate = () => {
         setRatingModalVisible(true);
+        console.log(ratingModalVisible);
     };
 
     const handleRatingSubmit = () => {
@@ -68,7 +78,7 @@ export const MainScreenMobile: React.FC = () => {
 
     return (
         <View style={tailwind`flex flex-1 bg-[#FAF7F0]`}>
-            <TopBarMobile title="Welcome to CoffeeApp" onSignInPress={handleSignInPress} />
+            <TopBarMobile title="Welcome to CoffeeApp" onButtonPress={handleSignInPress} />
 
             <Text style={tailwind`text-lg text-center my-4 font-bold`}>
                 {getGreeting()}, Тодор!
@@ -109,14 +119,14 @@ export const MainScreenMobile: React.FC = () => {
                 visible={modalVisible}
                 onRequestClose={handleCloseModal}
             >
-                <View style={tailwind`flex-1 justify-center items-center bg-black bg-opacity-50`}>
+                <View style={tailwind`flex-1 justify-center items-center bg-black bg-opacity-50 z-10`}>
                     <View style={tailwind`bg-white p-5 rounded w-4/5`}>
                         {selectedMarker && (
                             <>
-                                <Text className="text-lg font-semibold">{selectedMarker.title}</Text>
-                                <Text className="text-lg">{selectedMarker.description}</Text>
-                                <Text className="text-lg">Рейтинг: {selectedMarker.rating} звезди</Text>
-                                <Text className="text-lg">Марка на машината: {selectedMarker.brand}</Text>
+                                <Text style={tailwind`text-lg font-semibold`}>{selectedMarker.title}</Text>
+                                <Text style={tailwind`text-lg`}>{selectedMarker.description}</Text>
+                                <Text style={tailwind`text-lg`}>Рейтинг: {selectedMarker.rating} звезди</Text>
+                                <Text style={tailwind`text-lg`}>Марка на машината: {selectedMarker.brand}</Text>
                                 <View style={tailwind`flex flex-row justify-between pt-5`}>
                                     <Button title="Rate" onPress={handleRate} />
                                     <TouchableOpacity
@@ -143,13 +153,13 @@ export const MainScreenMobile: React.FC = () => {
                 visible={ratingModalVisible}
                 onRequestClose={() => setRatingModalVisible(false)}
             >
-                <View style={tailwind`flex-1 justify-center items-center bg-black bg-opacity-50`}>
+                <View style={tailwind`flex-1 justify-center items-center bg-black bg-opacity-50 z-50`}>
                     <View style={tailwind`bg-white p-5 rounded w-4/5`}>
-                        <Text className="text-xl font-semibold mb-4">Оценете как беше кафето☕️</Text>
+                        <Text style={tailwind`text-xl font-semibold mb-4`}>Оценете как беше кафето☕️</Text>
                         <View style={tailwind`flex flex-row justify-center mb-4`}>
                             {[1, 2, 3, 4, 5].map((star) => (
                                 <TouchableOpacity key={star} onPress={() => setRating(star)}>
-                                    <Text className={`text-2xl ${rating >= star ? 'text-yellow-500' : 'text-gray-400'}`}>★</Text>
+                                    <Text style={tailwind`text-2xl ${rating >= star ? 'text-yellow-500' : 'text-gray-400'}`}>★</Text>
                                 </TouchableOpacity>
                             ))}
                         </View>

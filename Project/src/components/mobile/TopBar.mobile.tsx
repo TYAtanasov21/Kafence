@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { TopBarProps } from '../shared/TopBar';
 import tailwind from 'twrnc';
-import Feather from '@expo/vector-icons/Feather';
+import Entypo from '@expo/vector-icons/Entypo';
 
 const TopBarMobile: React.FC<TopBarProps> = ({ title, onSignInPress }) => {
   return (
@@ -14,7 +14,7 @@ const TopBarMobile: React.FC<TopBarProps> = ({ title, onSignInPress }) => {
       />
 
       <TouchableOpacity onPress={onSignInPress} style={tailwind`justify-center`}>
-        <Feather name="user" size={35} />
+        <Entypo name = "menu" size={37} />
       </TouchableOpacity>
     </View>
   );

@@ -18,7 +18,7 @@ const mapId = '481bfcc0fdf44c5f';
 
 const GoogleMapsComponent: React.FC = () => {
   
-  const apiKey = process.env.GOOGLE_MAPS_API;
+  const apiKey = "AIzaSyCuY-4rBKZ28zMvIkuAglx5G-P_o3nsnAc";
   console.log(apiKey);
   const MarkerIcon = "https://img.icons8.com/ios-filled/50/000000/coffee.png"; 
 
@@ -49,7 +49,7 @@ const GoogleMapsComponent: React.FC = () => {
   useEffect(() => {
     const fetchMachines = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/machine/getMachines');
+        const response = await axios.get('http://localhost:5001/machine/getMachines');
         const machinesArray = response.data.array;
         setMachines(machinesArray);
       } catch (error) {

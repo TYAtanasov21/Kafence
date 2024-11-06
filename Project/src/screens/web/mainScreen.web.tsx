@@ -9,7 +9,7 @@ const MainScreenWeb: React.FC = () => {
 
   return (
     <div className="bg-my-orange min-h-screen flex flex-col overflow-auto">
-      <TopBar title="Kafence" onSignInPress={handleSignInPress} />
+      <TopBar title="Kafence" onButtonPress={handleSignInPress} />
 
       <div className="flex flex-col justify-center items-center p-5">
         <h1 className="text-center text-5xl font-bold text-my-black font-customFont pb-5">

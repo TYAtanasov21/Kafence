@@ -1,4 +1,4 @@
 export interface TopBarProps{
     title?: string;
-    onSignInPress: () => void;
+    onButtonPress: () => void;
 }

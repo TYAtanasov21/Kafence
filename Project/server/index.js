@@ -6,7 +6,7 @@ import userRoutes from './routes/userRoutes.js';
 import machineRoutes from './routes/machineRoutes.js';
 const { Pool } = pkg;
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 
 

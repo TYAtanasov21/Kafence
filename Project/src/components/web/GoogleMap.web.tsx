@@ -22,7 +22,7 @@ const GoogleMapsComponent: React.FC = () => {
   console.log(apiKey);
   const MarkerIcon = "https://img.icons8.com/ios-filled/50/000000/coffee.png"; 
 
-  const [selected, setSelected] = useState<google.maps.LatLng | null>(null); 
+  const [selected, setSelected] = useState<MachineProps| null>(null); 
   const [isLoaded, setIsLoaded] = useState(false);
   const [ratingModalVisible, setRatingModalVisible] = useState(false);
   const [rating, setRating] = useState(0);
@@ -42,8 +42,8 @@ const GoogleMapsComponent: React.FC = () => {
     }
   }, []);
 
-  const handleMarkerClick = (position: google.maps.LatLng) => {
-    setSelected(position);
+  const handleMarkerClick = (machine: MachineProps) => {
+    setSelected(machine);
   };
 
   useEffect(() => {
@@ -106,10 +106,10 @@ const GoogleMapsComponent: React.FC = () => {
           {
           machines && machines.length > 0 && machines.map((machine, index) => (
             <Marker 
-              position={{ lat: Number(machine.long), lng: Number(machine.lat)}} 
+              position={{ lat: Number(machine.lat), lng: Number(machine.long)}} 
               title="Coffee Machine"
               label="A"
-              onClick={() => handleMarkerClick(new google.maps.LatLng(Number(machine.long), Number(machine.lat)))}
+              onClick={() => handleMarkerClick(machine)}
               icon={{
                 url: MarkerIcon, 
                 scaledSize: new window.google.maps.Size(40, 40),
@@ -118,7 +118,7 @@ const GoogleMapsComponent: React.FC = () => {
           ))}
           {selected && (
             <InfoWindow
-              position={selected}
+              position={{lat: Number(selected.lat), lng: Number(selected.long)}}
               onCloseClick={() => setSelected(null)} 
               options={{
                 pixelOffset: new window.google.maps.Size(0, -30),
@@ -126,10 +126,9 @@ const GoogleMapsComponent: React.FC = () => {
             >
               <div className="bg-white flex flex-col ">
                 <div>
-                  <h1 className="text-lg font-semibold">Фердинандова 13</h1>
+                  <h1 className="text-lg font-semibold">{selected.name}</h1>
                   <p className="text-lg">Рейтинг: 4.7 звезди (20)</p>
                   <p className="text-lg">Работи: 24 часа</p>
-                  <p className="text-lg">Марка на машината: Lavazza</p>
                 </div>
                 <div className="flex flex-row justify-between pt-5"> 
                   <p className="text-lg">🏃‍♂️ 5 минути пеша</p>

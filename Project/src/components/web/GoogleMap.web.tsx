@@ -28,6 +28,7 @@ const GoogleMapsComponent: React.FC = () => {
   const [rating, setRating] = useState(0);
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [machines, setMachines] = useState<MachineProps[]>([]);
+  const [currentRating, setCurrentRating] = useState();
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -42,8 +43,9 @@ const GoogleMapsComponent: React.FC = () => {
     }
   }, []);
 
-  const handleMarkerClick = (machine: MachineProps) => {
+  const handleMarkerClick = async (machine: MachineProps) => {
     setSelected(machine);
+    setCurrentRating(await getRating(machine.id));
   };
 
   useEffect(() => {
@@ -77,8 +79,15 @@ const GoogleMapsComponent: React.FC = () => {
     setIsLoaded(true);
   };
 
-  const handleRatingSubmit = () => {
-    alert(`You rated this machine: ${rating} stars`);
+  const getRating = async (machineId: number) =>{
+    const response = await axios.post("http://localhost:5001/machine/getAvgRating", {"machineId": machineId});
+    console.log(response.data);
+    return response.data.rating;
+  }
+
+  const handleRatingSubmit = async () => {
+    alert(`You rated this machine (${selected.name}): ${rating} stars`);
+    await axios.post("http://localhost:5001/machine/rateMachine", {"machineId": selected.id, "rating": rating});
     setRatingModalVisible(false);
   };
   console.log(userLocation);
@@ -127,7 +136,7 @@ const GoogleMapsComponent: React.FC = () => {
               <div className="bg-white flex flex-col ">
                 <div>
                   <h1 className="text-lg font-semibold">{selected.name}</h1>
-                  <p className="text-lg">Рейтинг: 4.7 звезди (20)</p>
+                  <p className="text-lg">Рейтинг: {currentRating} (20)</p>
                   <p className="text-lg">Работи: 24 часа</p>
                 </div>
                 <div className="flex flex-row justify-between pt-5"> 

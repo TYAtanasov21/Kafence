@@ -32,6 +32,49 @@ router.get('/getMachines', async (req, res) =>{
     catch(error) {
         console.log(error);
     }
+        finally {
+        client.release();
+    }
 });
+
+router.post('/rateMachine', async (req, res)=>{
+    try{
+        const body = req.body;
+        console.log(body);
+        const client = await pool.connect();
+        const query = "INSERT INTO ratings (machineId, rating) VALUES ($1, $2)";
+        const response = await client.query(query, [body.machineId, body.rating]);
+        const data = response.rows
+        console.log("Rating complete");
+        res.status(200).json(data);
+    }
+    catch(error) {
+        console.log(error);
+    }
+    finally {
+        client.release();
+    }
+    
+});
+
+router.post('/getAvgRating', async (req, res)=>{
+    try{
+        const body = req.body;
+        console.log(body);
+        const client = await pool.connect();
+        const query = "SELECT AVG(rating) FROM ratings WHERE machineId = $1";
+        const response = await client.query(query, [body.machineId]);
+        const data = response.rows[0];
+        console.log("Retrieval complete: ", data);
+        res.status(200).json({"rating": data});
+    }
+    catch(error) {
+        console.log(error);
+    }
+    finally {
+        client.release();
+    }
+});
+
 
 export default router;

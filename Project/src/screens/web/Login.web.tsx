@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { GoogleOAuthProvider, GoogleLogin, CredentialResponse } from '@react-oauth/google';
-import { FaMicrosoft, FaApple } from 'react-icons/fa';
 import axios from 'axios';
-import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
+import { Link } from 'react-router-dom';
 
 interface UserObject {
   id: string;
@@ -23,33 +22,32 @@ const LogIn: React.FC = () => {
     event.preventDefault();
     setErrorMessage('');
 
-    // Basic validation
     if (!email || !password) {
       setErrorMessage('Please enter your email and password.');
       return;
     }
 
-    // Simulate an API call for sign-in
     console.log('Email:', email);
-    console.log('Password:', password);    // Reset form fields
+    console.log('Password:', password);
+
     setEmail('');
     setPassword('');
-    
   };
 
   const getUser = (user: any) => {
-    axios.get('http://localhost:5000/user/getUser', {
-      params: {
-          user: user
-      }
-  })
-  .then(response => {
-      console.log(response.data);
-  })
-  .catch(error => {
-      console.error('Error:', error);
-  });
-  }
+    axios
+      .get('http://localhost:5000/user/getUser', {
+        params: {
+          user: user,
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  };
 
   const onSuccess = (credentialResponse: CredentialResponse) => {
     if (credentialResponse.credential) {
@@ -72,20 +70,21 @@ const LogIn: React.FC = () => {
   const parseJwt = (token: string) => {
     const base64Url = token.split('.')[1];
     if (base64Url) {
-      const base64 = decodeURIComponent(atob(base64Url).split('').map((c) =>
-        '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
+      const base64 = decodeURIComponent(
+        atob(base64Url)
+          .split('')
+          .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+          .join('')
+      );
       return JSON.parse(base64) as UserObject;
     }
     return null;
   };
 
-  // useEffect(() =>{
-  //   getUser(user);
-  // }, [user]);
-
   const getUserSubmit = () => {
-    getUser({email:email, password:password})
-  }
+    getUser({ email: email, password: password });
+  };
+
   return (
     <GoogleOAuthProvider clientId={client_id}>
       <div className="flex flex-col items-center justify-center min-h-screen w-full bg-my-orange">
@@ -93,7 +92,9 @@ const LogIn: React.FC = () => {
           <img src="../../assets/logo-web-page.png" alt="logo" />
         </div>
         <div className="max-w-md w-full mx-auto p-3 border rounded-lg shadow-md bg-my-black">
-          <h2 className="text-3xl font-bold text-center mb-6 text-white font-customFont mt-3">Sign In</h2>
+          <h2 className="text-3xl font-bold text-center mb-6 text-white font-customFont mt-3">
+            Sign In
+          </h2>
           {errorMessage && <p className="text-red-500 text-center mb-4">{errorMessage}</p>}
 
           <form onSubmit={handleSubmit}>
@@ -153,6 +154,17 @@ const LogIn: React.FC = () => {
               width={500}
             />
           </div>
+
+          <p className="mt-6 text-center">
+            <span className="text-white">Don't have an account?</span>{' '}
+            <Link to = "/register">
+            <button
+              className="text-my-brown underline font-medium hover:text-my-brown-darker"
+            >
+              Register
+            </button>
+            </Link>
+          </p>
 
           {user && (
             <div className="mt-6 text-white">

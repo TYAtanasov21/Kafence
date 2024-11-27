@@ -28,12 +28,10 @@ router.get('/getMachines', async (req, res) =>{
         const response = await client.query("SELECT * FROM machines");
         const data = response.rows
         res.status(200).json({array:data});
+        client.release();
     }
     catch(error) {
         console.log(error);
-    }
-        finally {
-        client.release();
     }
 });
 
@@ -47,13 +45,12 @@ router.post('/rateMachine', async (req, res)=>{
         const data = response.rows
         console.log("Rating complete");
         res.status(200).json(data);
+        client.release();
     }
     catch(error) {
         console.log(error);
     }
-    finally {
-        client.release();
-    }
+
     
 });
 
@@ -67,13 +64,12 @@ router.post('/getAvgRating', async (req, res)=>{
         const data = response.rows[0];
         console.log("Retrieval complete: ", data);
         res.status(200).json({"rating": data});
+        client.release();
     }
     catch(error) {
         console.log(error);
     }
-    finally {
-        client.release();
-    }
+
 });
 
 

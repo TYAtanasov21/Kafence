@@ -3,6 +3,7 @@ import TopBar from "../../components/web/TopBar.web";
 import GoogleMapsComponent from "../../components/web/GoogleMap.web";
 import AddMachineForm from "../../components/web/AddMachineForm.web";
 import Footer from "../../components/web/Footer.web";
+import { Image } from "react-native";
 
 const MainScreenWeb: React.FC = () => {
   const handleSignInPress = () => {};
@@ -34,12 +35,9 @@ const MainScreenWeb: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex-1 flex justify-end mx-10">
-          <img
-            src="../../assets/coffee_cup.png"
-            alt="coffee image"
-            className="max-w-full h-auto"
-          />
+        <div className="flex-1 flex justify-end mx-10 max-w-full h-auto">
+          <Image
+          source = {require('../../../assets/coffee_cup.png')}/>
         </div>
       </div>
       <div className = "w-full max-w-full">

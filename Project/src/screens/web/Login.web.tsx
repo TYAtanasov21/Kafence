@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { GoogleOAuthProvider, GoogleLogin, CredentialResponse } from '@react-oauth/google';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { Image } from 'react-native';
 
 interface UserObject {
   id: string;
@@ -89,7 +90,9 @@ const LogIn: React.FC = () => {
     <GoogleOAuthProvider clientId={client_id}>
       <div className="flex flex-col items-center justify-center min-h-screen w-full bg-my-orange">
         <div className="pb-20">
-          <img src="../../assets/logo-web-page.png" alt="logo" />
+        <Image
+        source={require('../../../assets/logo-web-page.png')}
+        />
         </div>
         <div className="max-w-md w-full mx-auto p-3 border rounded-lg shadow-md bg-my-black">
           <h2 className="text-3xl font-bold text-center mb-6 text-white font-customFont mt-3">

@@ -6,6 +6,7 @@ import TopBarMobile from "../../components/mobile/TopBar.mobile";
 import Entypo from '@expo/vector-icons/Entypo';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
+import { useRoute } from '@react-navigation/native';
 
 interface MachineProps {
   long: number;
@@ -16,7 +17,8 @@ interface MachineProps {
 
 export const MainScreenMobile: React.FC = () => {
   const navigation = useNavigation();
-
+  const route = useRoute(); // Get the route using useRoute hook
+  const { user } = route.params;
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [selected, setSelected] = useState<MachineProps | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -36,7 +38,7 @@ export const MainScreenMobile: React.FC = () => {
 
   const handleRatingSubmit = async () => {
     alert(`You rated this machine (${selected.name}): ${rating} stars`);
-    await axios.post("http://10.0.2.2:5001/machine/rateMachine", {"machineId": selected.id, "rating": rating});
+    await axios.post("http://10.0.2.2:5001/machine/rateMachine", {"machineId": selected.id, "rating": rating, "userId": user.id});
     setRatingModalVisible(false);
   };
 
@@ -137,7 +139,7 @@ export const MainScreenMobile: React.FC = () => {
       <TopBarMobile title="Welcome to CoffeeApp" onButtonPress={handleMenuPress} />
 
       <Text style={tailwind`text-lg text-center my-4 font-bold`}>
-        {getGreeting()}, Тодор!
+        {getGreeting()}, {user.username}!
       </Text>
 
       <MapView

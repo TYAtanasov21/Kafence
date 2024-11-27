@@ -36,23 +36,37 @@ router.get('/getMachines', async (req, res) =>{
     }
 });
 
-router.post('/rateMachine', async (req, res)=>{
-    try{
+router.post('/rateMachine', async (req, res) => {
+    try {
         const body = req.body;
         console.log(body);
-        const client = await pool.connect();
-        const query = "INSERT INTO ratings (machineId, rating) VALUES ($1, $2)";
-        const response = await client.query(query, [body.machineId, body.rating]);
-        const data = response.rows;
-        console.log("Rating complete");
-        res.status(200).json(data);
-        client.release();
-    }
-    catch(error) {
-        console.log(error);
-    }
 
-    
+        const client = await pool.connect();
+        const { machineId, rating, userId } = body;
+
+        // Check if the user has already rated the machine
+        const checkQuery = "SELECT * FROM ratings WHERE machineId = $1 AND userId = $2";
+        const checkResponse = await client.query(checkQuery, [machineId, userId]);
+
+        if (checkResponse.rows.length > 0) {
+            // User has already rated, so we update their rating
+            const updateQuery = "UPDATE ratings SET rating = $1 WHERE machineId = $2 AND userId = $3";
+            await client.query(updateQuery, [rating, machineId, userId]);
+            console.log("Rating updated");
+            res.status(200).json({ message: "Rating updated successfully" });
+        } else {
+            // User has not rated the machine, so we insert a new rating
+            const insertQuery = "INSERT INTO ratings (machineId, rating, userId) VALUES ($1, $2, $3)";
+            await client.query(insertQuery, [machineId, rating, userId]);
+            console.log("Rating added");
+            res.status(200).json({ message: "Rating added successfully" });
+        }
+
+        client.release();
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: "Something went wrong" });
+    }
 });
 
 router.post('/getRating', async (req, res)=>{
@@ -78,6 +92,5 @@ router.post('/getRating', async (req, res)=>{
     }
 
 });
-
 
 export default router;

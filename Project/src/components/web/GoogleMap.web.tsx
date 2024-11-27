@@ -3,6 +3,8 @@ import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/ap
 import axios from 'axios';
 import { Image } from 'react-native';
 import tailwind from 'twrnc';
+import { useNavigate } from 'react-router-dom';
+
 import {User} from "../shared/user";
 const mapContainerStyle = {
   width: '60%',
@@ -26,7 +28,7 @@ const GoogleMapsComponent: React.FC<GoogleMapsComponentProps> = ({user}) => {
   const apiKey = process.env.GOOGLE_MAPS_API;
   console.log(apiKey);
   const MarkerIcon = "https://img.icons8.com/ios-filled/50/000000/coffee.png"; 
-
+  const navigate = useNavigate();
   const [selected, setSelected] = useState<MachineProps| null>(null); 
   const [isLoaded, setIsLoaded] = useState(false);
   const [ratingModalVisible, setRatingModalVisible] = useState(false);
@@ -84,7 +86,9 @@ const GoogleMapsComponent: React.FC<GoogleMapsComponentProps> = ({user}) => {
     }
   }, [machines]);
   const handleRate = () => {
+    if(user)
     setRatingModalVisible(true);
+    else navigate("/login/");
   };
 
   const handleLoad = () => {
@@ -163,7 +167,7 @@ const GoogleMapsComponent: React.FC<GoogleMapsComponentProps> = ({user}) => {
                     onClick={() => {
                       if (selected) {
                         const lat = selected.lat;
-                        const lng = selected.lng; 
+                        const lng = selected.long; 
                         const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=walking`;
                         window.open(url, '_blank');
                       }

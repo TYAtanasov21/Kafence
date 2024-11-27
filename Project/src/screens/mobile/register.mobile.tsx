@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import tw from 'twrnc';
 import { useNavigation } from '@react-navigation/native';
-
+import axios from 'axios';
 const Register: React.FC = () => {
   const navigation = useNavigation();
 
@@ -11,7 +11,7 @@ const Register: React.FC = () => {
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setErrorMessage('');
     if (!name || !email || !password) {
       setErrorMessage('Please fill out all fields.');
@@ -26,6 +26,7 @@ const Register: React.FC = () => {
     // Local simulation: 
     const userData = { name, email, password };
     console.log('User Registered:', userData);
+    const response = await axios.post("http://10.0.2.2:5001/user/register", {username: userData.name, email: userData.email, password: userData.password} );
 
     // Navigate to MainScreenMobile after successful registration (without backend)
     navigation.navigate('MainScreenMobile');

@@ -20,7 +20,7 @@ const LandingScreen: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [user, setUser] = useState<UserObject | null>(null);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setErrorMessage('');
     if (!email || !password) {
       setErrorMessage('Please enter your email and password.');
@@ -29,9 +29,23 @@ const LandingScreen: React.FC = () => {
 
     console.log('Email:', email);
     console.log('Password:', password);
-    setEmail('');
-    setPassword('');
-    navigation.navigate('MainScreenMobile');
+    try {
+      const response = await axios.post('http://10.0.2.2:5001/user/login', { email, password });
+      const data = response.data;
+      if (data) {
+        console.log("User logged in successfully:", data);
+        navigation.navigate('MainScreenMobile', { user: data });
+
+      } else {
+        setErrorMessage('Invalid email or password.');
+      }
+    } catch (error: any) {
+      console.error("Error during login:", error.message);
+      setErrorMessage('Something went wrong. Please try again later.');
+    } finally {
+      setEmail('');
+      setPassword('');
+    }
   };
 
   const getUser = (user: any) => {

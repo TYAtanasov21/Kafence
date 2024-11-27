@@ -3,6 +3,7 @@ import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/ap
 import axios from 'axios';
 import { Image } from 'react-native';
 import tailwind from 'twrnc';
+import {User} from "../shared/user";
 const mapContainerStyle = {
   width: '60%',
   height: '600px',
@@ -17,7 +18,10 @@ interface MachineProps {
 
 const mapId = '481bfcc0fdf44c5f';
 
-const GoogleMapsComponent: React.FC = () => {
+interface GoogleMapsComponentProps {
+  user: User;
+}
+const GoogleMapsComponent: React.FC<GoogleMapsComponentProps> = ({user}) => {
   
   const apiKey = process.env.GOOGLE_MAPS_API;
   console.log(apiKey);

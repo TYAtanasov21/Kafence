@@ -4,9 +4,17 @@ import GoogleMapsComponent from "../../components/web/GoogleMap.web";
 import AddMachineForm from "../../components/web/AddMachineForm.web";
 import Footer from "../../components/web/Footer.web";
 import { Image } from "react-native";
+import { User } from "../../components/shared/user";
+import { useEffect, useState } from "react";
+import { useLocation } from 'react-router-dom';
+
+
 
 const MainScreenWeb: React.FC = () => {
+  const location = useLocation();
+  const user = location.state?.user as User | null;
   const handleSignInPress = () => {};
+
 
   return (
     <div className="bg-my-orange min-h-screen flex flex-col overflow-auto">
@@ -14,12 +22,12 @@ const MainScreenWeb: React.FC = () => {
 
       <div className="flex flex-col justify-center items-center p-5">
         <h1 className="text-center text-5xl font-bold text-my-black font-customFont pb-5">
-          Обичаш кафе?
+          {user?.username} Обичаш кафе?
         </h1>
         <h3 className="text-center text-3xl font-semibold text-my-black font-customFont pb-16">
           Намери най близката кафе машина в района ти за секунди!
         </h3>
-        <GoogleMapsComponent />
+        <GoogleMapsComponent user={user}/>
       </div>
 
       <div className="flex flex-row justify-between p-12 mx-10">

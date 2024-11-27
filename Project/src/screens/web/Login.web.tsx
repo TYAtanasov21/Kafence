@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { GoogleOAuthProvider, GoogleLogin, CredentialResponse } from '@react-oauth/google';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Image } from 'react-native';
 
 interface UserObject {
@@ -13,7 +13,7 @@ interface UserObject {
 
 const LogIn: React.FC = () => {
   const client_id = process.env.GOOGLE_CLIENT_ID;
-
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -34,6 +34,7 @@ const LogIn: React.FC = () => {
       const data = response.data;
       if (data) {
         console.log("User logged in successfully:", data);
+        navigate("/", {state:{user: data}});
       } else {
         setErrorMessage('Invalid email or password.');
       }

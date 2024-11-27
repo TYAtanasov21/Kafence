@@ -15,8 +15,8 @@ const pool = new Pool({
     host: 'aws-0-eu-central-1.pooler.supabase.com',
     user: process.env.PG_USERNAME,
     password: process.env.PG_PASSWORD,
-    database: 'postgres',
-    port: 5432,
+    database: 'postgres',   
+    port: 6543,
     ssl: {
         rejectUnauthorized: false, 
     },
@@ -26,7 +26,8 @@ router.get('/getMachines', async (req, res) =>{
     try{
         const client = await pool.connect();
         const response = await client.query("SELECT * FROM machines");
-        const data = response.rows
+        const data = response.rows;
+        console.log(data);
         res.status(200).json({array:data});
         client.release();
     }

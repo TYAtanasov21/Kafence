@@ -2,7 +2,6 @@ import React from 'react';
 import {TopBarProps}  from '../shared/TopBar';
 import Feather from '@expo/vector-icons/Feather';
 import { Link } from 'react-router-dom';
-
 const TopBar: React.FC<TopBarProps> = ({ title, onButtonPress }) => {
   return (
     <div className="flex items-center justify-between w-full h-20 px-4">

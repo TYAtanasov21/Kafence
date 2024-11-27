@@ -5,30 +5,40 @@ import tailwind from 'twrnc';
 import TopBarMobile from "../../components/mobile/TopBar.mobile";
 import Entypo from '@expo/vector-icons/Entypo';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 
-interface CoffeeMachine {
+interface MachineProps {
+  long: number;
   lat: number;
-  lng: number;
-  title: string;
-  description: string;
-  rating: number;
-  brand: string;
+  name: string;
+  id: number;
 }
 
 export const MainScreenMobile: React.FC = () => {
   const navigation = useNavigation();
 
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
-  const [selectedMarker, setSelectedMarker] = useState<CoffeeMachine | null>(null);
+  const [selected, setSelected] = useState<MachineProps | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [ratingModalVisible, setRatingModalVisible] = useState(false);
   const [rating, setRating] = useState(0);
   const [menuVisible, setMenuVisible] = useState(false);
+  const [machines, setMachines] = useState<MachineProps[]>();
+  const [currentRating, setCurrentRating] = useState<Number>(0);
+  const [currentRatingCount, setCurrentRatingCount] = useState<Number>(0);
 
-  const coffeeMachines: CoffeeMachine[] = [
-    { lat: 42.4975, lng: 27.4700, title: "Coffee Machine A", description: "Фердинандова 13", rating: 4.7, brand: "Lavazza" },
-    { lat: 42.5000, lng: 27.4600, title: "Coffee Machine B", description: "ул. Мостова 7", rating: 4.5, brand: "Nespresso" },
-  ];
+
+  const getRating = async (machineId: number) =>{
+    const response = await axios.post("http://10.0.2.2:5001/machine/getRating", {"machineId": machineId});
+    console.log(response.data);
+    return response.data;
+  }
+
+  const handleRatingSubmit = async () => {
+    alert(`You rated this machine (${selected.name}): ${rating} stars`);
+    await axios.post("http://10.0.2.2:5001/machine/rateMachine", {"machineId": selected.id, "rating": rating});
+    setRatingModalVisible(false);
+  };
 
   const handleMenuPress = () => {
     setMenuVisible(!menuVisible);
@@ -79,25 +89,48 @@ export const MainScreenMobile: React.FC = () => {
       );
     }
   }, []);
-
-  const handleMarkerPress = (marker: CoffeeMachine) => {
-    setSelectedMarker(marker);
-    setModalVisible(true);
+  const handleMarkerPress = async (machine: MachineProps) => {
+    try {
+      setSelected(machine);
+  
+      // Uncommenting this section should work if the API call is correct.
+      const response = await getRating(machine.id);
+      console.log(response);
+  
+      const avg = Number(response.rating.avg);
+      const count = Number(response.count.count);
+  
+      setCurrentRating(avg);
+      setCurrentRatingCount(count);
+  
+      setModalVisible(true);
+    } catch (error) {
+      console.error("Error fetching rating:", error);
+    }
   };
+
+  useEffect(() => {
+    const fetchMachines = async () => {
+      try {
+        const response = await axios.get('http://10.0.2.2:5001/machine/getMachines');
+        const machinesArray = response.data.array;
+        setMachines(machinesArray);
+      } catch (error) {
+        console.log("Error fetching machines: ", error);
+      }
+    };
+    fetchMachines();
+  }, [machines]);
 
   const handleCloseModal = () => {
     setModalVisible(false);
-    setSelectedMarker(null);
+    setSelected(null);
   };
 
   const handleRate = () => {
     setRatingModalVisible(true);
   };
 
-  const handleRatingSubmit = () => {
-    alert(`You rated this machine: ${rating} stars`);
-    setRatingModalVisible(false);
-  };
 
   return (
     <View style={tailwind`flex flex-1 bg-[#FAF7F0]`}>
@@ -123,16 +156,16 @@ export const MainScreenMobile: React.FC = () => {
             pinColor="blue"
           />
         )}
-
-        {coffeeMachines.map((machine, index) => (
+      {
+        machines && machines.length > 0 && machines.map((machine, index) => (
           <Marker
             key={index}
-            coordinate={{ latitude: machine.lat, longitude: machine.lng }}
-            title={machine.title}
-            description={machine.description}
-            onPress={() => handleMarkerPress(machine)}
+            coordinate={{ latitude: Number(machine.lat), longitude: Number(machine.long) }}
+            pinColor='red'
+            onPress={() => {handleMarkerPress(machine)}}
           />
         ))}
+        
       </MapView>
 
       {/* Menu Dropdown */}
@@ -163,6 +196,7 @@ export const MainScreenMobile: React.FC = () => {
       )}
 
       {/* Marker Details Modal */}
+      
       <Modal
         transparent={true}
         animationType="slide"
@@ -171,21 +205,26 @@ export const MainScreenMobile: React.FC = () => {
       >
         <View style={tailwind`flex-1 justify-center items-center bg-black bg-opacity-20 z-10 rounded`}>
           <View style={tailwind`bg-white p-5 rounded w-4/5`}>
-            {selectedMarker && (
+            {selected && (
               <>
                 <View style={tailwind`flex flex-row justify-between`}>
-                  <Text style={tailwind`text-lg font-semibold`}>{selectedMarker.title}</Text>
+                  <Text style={tailwind`text-lg font-semibold`}>{selected.name}</Text>
                   <TouchableOpacity onPress={handleCloseModal} style={tailwind`justify-center items-center`}>
                     <Entypo name="cross" size={35} color="black" />
                   </TouchableOpacity>
                 </View>
-                <Text style={tailwind`text-lg`}>{selectedMarker.description}</Text>
-                <Text style={tailwind`text-lg`}>Рейтинг: {selectedMarker.rating} звезди</Text>
-                <Text style={tailwind`text-lg`}>Марка на машината: {selectedMarker.brand}</Text>
+                <Text style={tailwind`text-lg`}>Рейтинг: {currentRating}
+                  <Text 
+                        style={tailwind`text-xl text-yellow-500 rounded-md`} 
+                      >
+                        ★
+                  </Text>
+                  ({currentRatingCount})
+                  </Text>
                 <View style={tailwind`flex flex-row justify-between pt-5`}>
                   <TouchableOpacity
                     onPress={() => {
-                      const url = `https://www.google.com/maps/dir/?api=1&destination=${selectedMarker.lat},${selectedMarker.lng}&travelmode=walking`;
+                      const url = `https://www.google.com/maps/dir/?api=1&destination=${selected.lat},${selected.long}&travelmode=walking`;
                       Linking.openURL(url);
                     }}
                     style={tailwind`py-2 px-3 bg-green-400 rounded-md`}

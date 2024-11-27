@@ -43,7 +43,7 @@ router.post('/rateMachine', async (req, res)=>{
         const client = await pool.connect();
         const query = "INSERT INTO ratings (machineId, rating) VALUES ($1, $2)";
         const response = await client.query(query, [body.machineId, body.rating]);
-        const data = response.rows
+        const data = response.rows;
         console.log("Rating complete");
         res.status(200).json(data);
         client.release();
@@ -55,16 +55,22 @@ router.post('/rateMachine', async (req, res)=>{
     
 });
 
-router.post('/getAvgRating', async (req, res)=>{
+router.post('/getRating', async (req, res)=>{
     try{
         const body = req.body;
         console.log(body);
         const client = await pool.connect();
-        const query = "SELECT AVG(rating) FROM ratings WHERE machineId = $1";
-        const response = await client.query(query, [body.machineId]);
-        const data = response.rows[0];
-        console.log("Retrieval complete: ", data);
-        res.status(200).json({"rating": data});
+
+        const queryRating = "SELECT AVG(rating) FROM ratings WHERE machineId = $1";
+        const responseRating = await client.query(queryRating, [body.machineId]);
+        const dataRating = responseRating.rows[0];
+
+        const queryCount = "SELECT COUNT(rating) FROM ratings WHERE machineId = $1";
+        const responseCount = await client.query(queryCount, [body.machineId]);
+        const dataCount = responseCount.rows[0];
+
+        console.log("Retrieval complete: ", dataRating, " " ,dataCount);
+        res.status(200).json({"rating": dataRating, "count": dataCount});
         client.release();
     }
     catch(error) {

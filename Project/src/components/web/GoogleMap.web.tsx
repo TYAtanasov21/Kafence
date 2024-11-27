@@ -30,6 +30,7 @@ const GoogleMapsComponent: React.FC = () => {
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [machines, setMachines] = useState<MachineProps[]>([]);
   const [currentRating, setCurrentRating] = useState<Number>(0);
+  const [currentRatingCount, setCurrentRatingCount] = useState<Number>(0);
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -47,10 +48,12 @@ const GoogleMapsComponent: React.FC = () => {
   const handleMarkerClick = async (machine: MachineProps) => {
     setSelected(machine);
     const response = await getRating(machine.id);
-    const avg = Number(response.avg);
-    console.log(typeof avg);
-    console.log(avg);
+    console.log(response);
+    const avg = Number(response.rating.avg);
+    const count = Number(response.count.count);
+
     setCurrentRating(avg);
+    setCurrentRatingCount(count);
   };
 
   useEffect(() => {
@@ -85,9 +88,9 @@ const GoogleMapsComponent: React.FC = () => {
   };
 
   const getRating = async (machineId: number) =>{
-    const response = await axios.post("http://localhost:5001/machine/getAvgRating", {"machineId": machineId});
+    const response = await axios.post("http://localhost:5001/machine/getRating", {"machineId": machineId});
     console.log(response.data);
-    return response.data.rating;
+    return response.data;
   }
 
   const handleRatingSubmit = async () => {
@@ -141,7 +144,13 @@ const GoogleMapsComponent: React.FC = () => {
               <div className="bg-white flex flex-col ">
                 <div>
                   <h1 className="text-lg font-semibold">{selected?.name}</h1>
-                  <p className="text-lg">Рейтинг: {currentRating} (20)</p>
+                  <p className="text-lg">Рейтинг: {currentRating} 
+                      <span 
+                        className={`text-xl text-yellow-500 rounded-md`} 
+                      >
+                        ★
+                      </span>
+                    ({currentRatingCount})</p>
                   <p className="text-lg">Работи: 24 часа</p>
                 </div>
                 <div className="flex flex-row justify-between pt-5"> 

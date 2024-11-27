@@ -90,5 +90,59 @@ router.post('/checkUser', async (req, res) => {
     }
 });
 
+// router.post('/login', async (req, res) =>{
+//     try {
+//         const client = pool.connect();
+
+//         const {email, password} = req.body;
+//         const hashedPassword = await bcrypt.hash(password, saltRounds);
+//         const query = "SELECT * FROM users WHERE email = $1 AND password = $2";
+//         const response = await client.query(query, [email, hashedPassword]);
+
+//         const data = response.rows;
+
+//         if(data.length > 0){
+//             return res.status(200).json({user: data[0], check: true});
+//         }
+//         else return res.status(400).json({check: false});
+//     }
+//     catch (error){
+//         console.error('Error in /login:', error);
+//         res.status(500).json({ error: "Server error" });  
+//       }
+// });
+
+router.post('/login', async (req, res) => {
+    try {
+        const client = await pool.connect();
+        console.log('Connected to the pg database');
+    
+        const password = req.body.password;
+        const email = req.body.email;
+    
+        const response = await client.query("SELECT * FROM users WHERE email = $1", [email]);
+    
+        if (response.rows.length > 0) {
+          const user = response.rows[0];
+          if (bcrypt.compareSync(password, user.password)) {
+            console.log(user);
+            res.status(200).json(user);
+          } else {
+            console.log('Invalid password');
+            res.status(401).json({ message: 'Invalid password' });
+          }
+        } else {
+          console.log('User not found');
+          res.status(404).json({ message: 'User not found' });
+        }
+    
+        client.release();
+      } catch (error) {
+        console.error('Error querying user:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+      }
+    
+});
+
 
 export default router;

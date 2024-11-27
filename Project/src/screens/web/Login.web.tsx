@@ -19,36 +19,46 @@ const LogIn: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [user, setUser] = useState<UserObject | null>(null);
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setErrorMessage('');
-
+  
+    // Validate inputs
     if (!email || !password) {
       setErrorMessage('Please enter your email and password.');
       return;
     }
-
-    console.log('Email:', email);
-    console.log('Password:', password);
-
-    setEmail('');
-    setPassword('');
+  
+    try {
+      const response = await axios.post('http://localhost:5001/user/login', { email, password });
+      const data = response.data;
+      if (data) {
+        console.log("User logged in successfully:", data);
+      } else {
+        setErrorMessage('Invalid email or password.');
+      }
+    } catch (error: any) {
+      console.error("Error during login:", error.message);
+      setErrorMessage('Something went wrong. Please try again later.');
+    } finally {
+      setEmail('');
+      setPassword('');
+    }
   };
-
-  const getUser = (user: any) => {
-    axios
-      .get('http://localhost:5000/user/getUser', {
-        params: {
-          user: user,
-        },
-      })
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
-  };
+  // const getUser = (user: any) => {
+  //   axios
+  //     .get('http://localhost:5001/user/getUser', {
+  //       params: {
+  //         user: user,
+  //       },
+  //     })
+  //     .then((response) => {
+  //       console.log(response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error:', error);
+  //     });
+  // };
 
   const onSuccess = (credentialResponse: CredentialResponse) => {
     if (credentialResponse.credential) {
@@ -82,9 +92,9 @@ const LogIn: React.FC = () => {
     return null;
   };
 
-  const getUserSubmit = () => {
-    getUser({ email: email, password: password });
-  };
+  // const getUserSubmit = () => {
+  //   getUser({ email: email, password: password });
+  // };
 
   return (
     <GoogleOAuthProvider clientId={client_id}>
@@ -130,10 +140,6 @@ const LogIn: React.FC = () => {
               />
             </div>
             <button
-              onClick={(e) => {
-                e.preventDefault();
-                getUserSubmit();
-              }}
               type="submit"
               className="w-full py-2 px-4 bg-my-brown text-white font-semibold rounded-md hover:bg-my-brown-darker transition font-customFont"
             >
@@ -141,7 +147,7 @@ const LogIn: React.FC = () => {
             </button>
           </form>
 
-          <div className="flex items-center justify-between mt-5 mb-3">
+          {/* <div className="flex items-center justify-between mt-5 mb-3">
             <hr className="w-full border-gray-300" />
             <span className="px-2 text-gray-500">or</span>
             <hr className="w-full border-gray-300" />
@@ -167,7 +173,7 @@ const LogIn: React.FC = () => {
               Register
             </button>
             </Link>
-          </p>
+          </p> */}
 
           {user && (
             <div className="mt-6 text-white">

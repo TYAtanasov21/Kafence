@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-
+import axios from 'axios';
 const Register: React.FC = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setErrorMessage('');
 
@@ -17,10 +17,8 @@ const Register: React.FC = () => {
     }
 
     // Simulate an API call for registration
-    console.log('Name:', name);
-    console.log('Email:', email);
-    console.log('Password:', password);
-
+      const response = await axios.post("http://localhost:5001/user/register", {username: name, email: email, password: password} );
+      console.log(response.data.message);
     // Reset form fields
     setName('');
     setEmail('');

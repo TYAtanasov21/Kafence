@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/api';
 import axios from 'axios';
 import { Image } from 'react-native';
 import tailwind from 'twrnc';
 import { useNavigate } from 'react-router-dom';
+import { MarkerClusterer } from '@react-google-maps/api';
+
 
 import {User} from "../shared/user";
 const mapContainerStyle = {
@@ -23,11 +25,12 @@ const mapId = '481bfcc0fdf44c5f';
 interface GoogleMapsComponentProps {
   user: User;
 }
+
 const GoogleMapsComponent: React.FC<GoogleMapsComponentProps> = ({user}) => {
   
   const apiKey = process.env.GOOGLE_MAPS_API;
   console.log(apiKey);
-  const MarkerIcon = "https://img.icons8.com/ios-filled/50/000000/coffee.png"; 
+  const MarkerIcon = "https://img.icons8.com/?size=100&id=12860&format=png&color=000000"; 
   const navigate = useNavigate();
   const [selected, setSelected] = useState<MachineProps| null>(null); 
   const [isLoaded, setIsLoaded] = useState(false);
@@ -37,6 +40,22 @@ const GoogleMapsComponent: React.FC<GoogleMapsComponentProps> = ({user}) => {
   const [machines, setMachines] = useState<MachineProps[]>([]);
   const [currentRating, setCurrentRating] = useState<Number>(0);
   const [currentRatingCount, setCurrentRatingCount] = useState<Number>(0);
+
+  const clustererOptions = {
+    gridSize: 50, 
+    maxZoom: 15, 
+    styles: [
+      {
+        url: "https://img.icons8.com/?size=100&id=VW9mAoyk46FP&format=png&color=000000",
+        height: 40,
+        width: 40,
+        textColor: "black",
+        textSize: 12,
+      },
+    ],
+  };
+
+
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -76,13 +95,12 @@ const GoogleMapsComponent: React.FC<GoogleMapsComponentProps> = ({user}) => {
     fetchMachines();
   }, []);
 
-  // Log the machines sate after it updates
   useEffect(() => {
     console.log(machines, "updated machines");
-    if (machines.length > 0) { // Check if the machines array is not empty
-      console.log(typeof Number(machines[0].lat)); // Now safe to access machines[0].lat
+    if (machines.length > 0) {
+      console.log(typeof Number(machines[0].lat));
     } else {
-      console.log("Machines array is empty."); // Log message for empty array
+      console.log("Machines array is empty.");
     }
   }, [machines]);
   const handleRate = () => {
@@ -108,6 +126,27 @@ const GoogleMapsComponent: React.FC<GoogleMapsComponentProps> = ({user}) => {
   };
   console.log(userLocation);
 
+
+  const renderMarkers = (clusterer) => {
+    return (
+      machines &&
+      machines.length > 0 &&
+      machines.map((machine) => (
+        <Marker
+          key={machine.id}
+          position={{ lat: Number(machine.lat), lng: Number(machine.long) }}
+          title="Coffee Machine"
+          onClick={() => handleMarkerClick(machine)}
+          icon={{
+            url: MarkerIcon,
+            scaledSize: new window.google.maps.Size(40, 40),
+          }}
+          clusterer={clusterer}
+        />
+      ))
+    );
+  };
+
   return (
     <LoadScript googleMapsApiKey={apiKey} onLoad={handleLoad}>
       {isLoaded && (
@@ -117,6 +156,7 @@ const GoogleMapsComponent: React.FC<GoogleMapsComponentProps> = ({user}) => {
           zoom={12}
           options={{ mapId: mapId }}
         >
+
           {userLocation && (
             <Marker 
             
@@ -128,19 +168,11 @@ const GoogleMapsComponent: React.FC<GoogleMapsComponentProps> = ({user}) => {
               }} 
             />
           )}
-          {
-          machines && machines.length > 0 && machines.map((machine, index) => (
-            <Marker 
-              position={{ lat: Number(machine.lat), lng: Number(machine.long)}} 
-              title="Coffee Machine"
-              label="A"
-              onClick={() => handleMarkerClick(machine)}
-              icon={{
-                url: MarkerIcon, 
-                scaledSize: new window.google.maps.Size(40, 40),
-              }} 
-            />
-          ))}
+
+          <MarkerClusterer options={clustererOptions}>
+            {(clusterer) => renderMarkers(clusterer)}
+          </MarkerClusterer>
+
           {selected && (
             <InfoWindow
               position={{lat: Number(selected.lat), lng: Number(selected.long)}}

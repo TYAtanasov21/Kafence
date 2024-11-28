@@ -44,7 +44,7 @@ router.post('/register', async (req, res) => {
             client.release();
             return res.status(200).json({ code: 3, message: 'Email already taken' });
         } else {
-            const hashedPassword = await bcrypt.hash(password, saltRounds);
+            const hashedPassword = await bcrypt.hash(password.toString(), saltRounds);
 
             await client.query('INSERT INTO users (username, email, password) VALUES ($1, $2, $3)', [username, email, hashedPassword]);
 
@@ -74,20 +74,18 @@ router.post('/checkUser', async (req, res) => {
             "SELECT * FROM users WHERE username = $1 AND email = $2",
             [username, email]
         );
-
         if (response.rows.length > 0) {
            return res.status(200).json({ message: "User exists", user: response.rows[0], check: true });
         } else {
-            return res.status(404).json({ message: "User does not exist", check: false });
+            return res.status(200).json({ message: "User does not exist", check: false });
         }
+
+
     } 
     catch (error) {
         console.error('Error in /checkUser:', error);
         res.status(500).json({ error: "Server error" });
     } 
-    finally {
-        client.release();
-    }
 });
 
 // router.post('/login', async (req, res) =>{

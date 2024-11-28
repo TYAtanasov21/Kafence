@@ -10,7 +10,6 @@ interface UserObject {
   email: string;
   picture: string;
 }
-
 const LogIn: React.FC = () => {
   const client_id = process.env.GOOGLE_CLIENT_ID;
   const navigate = useNavigate();
@@ -61,18 +60,27 @@ const LogIn: React.FC = () => {
   //     });
   // };
 
-  const onSuccess = (credentialResponse: CredentialResponse) => {
+  const onSuccess = async (credentialResponse: CredentialResponse) => {
     if (credentialResponse.credential) {
       const userProfile = parseJwt(credentialResponse.credential);
       if (userProfile) {
-        setUser(userProfile);
         console.log('Login Success: current user:', userProfile);
+        const response = await axios.post('http://localhost:5001/user/checkUser', {username: userProfile.given_name, email: userProfile.email});
+        if(!response.data.check) {
+          await axios.post("http://localhost:5001/user/register", {username: userProfile.given_name, email: userProfile.email, password: userProfile.nbf.toString()}); 
+          console.log("user has been registered");
+        }
+        else {
+
+        }
       } else {
         console.error('Failed to parse user profile');
       }
     } else {
       console.error('No credential found');
     }
+
+
   };
 
   const onError = () => {
@@ -88,7 +96,7 @@ const LogIn: React.FC = () => {
           .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
           .join('')
       );
-      return JSON.parse(base64) as UserObject;
+      return JSON.parse(base64) as any;
     }
     return null;
   };
@@ -148,7 +156,7 @@ const LogIn: React.FC = () => {
             </button>
           </form>
 
-          {/* <div className="flex items-center justify-between mt-5 mb-3">
+          <div className="flex items-center justify-between mt-5 mb-3">
             <hr className="w-full border-gray-300" />
             <span className="px-2 text-gray-500">or</span>
             <hr className="w-full border-gray-300" />
@@ -167,18 +175,16 @@ const LogIn: React.FC = () => {
 
           <p className="mt-6 text-center">
             <span className="text-white">Don't have an account?</span>{' '}
-            <Link to = "/register">
             <button
               className="text-my-brown underline font-medium hover:text-my-brown-darker"
+              onClick={() => navigate("../register")}
             >
               Register
             </button>
-            </Link>
-          </p> */}
+          </p>
 
           {user && (
             <div className="mt-6 text-white">
-              <h3>Welcome, {user.name}</h3>
               <img src={user.picture} alt={user.name} className="rounded-full mt-2" />
             </div>
           )}

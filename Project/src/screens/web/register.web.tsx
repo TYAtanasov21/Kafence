@@ -28,7 +28,7 @@ const Register: React.FC = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen w-full bg-my-orange">
       <div className="pb-10">
-        <img src={require('../../assets/logo-web-page.png')} alt="logo" />
+        <img src={require('../../../assets/logo-web-page.png')} alt="logo" />
       </div>
       <div className="max-w-md w-full mx-auto p-5 border rounded-lg shadow-md bg-my-black">
         <h2 className="text-3xl font-bold text-center mb-6 text-white font-customFont">Register</h2>

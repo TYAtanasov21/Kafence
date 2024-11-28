@@ -122,7 +122,7 @@ router.post('/login', async (req, res) => {
     
         if (response.rows.length > 0) {
           const user = response.rows[0];
-          if (bcrypt.compareSync(password, user.password)) {
+          if (bcrypt.compareSync(password.toString(), user.password)) {
             console.log(user);
             res.status(200).json(user);
           } else {

@@ -67,12 +67,24 @@ const LogIn: React.FC = () => {
         console.log('Login Success: current user:', userProfile);
         const response = await axios.post('http://localhost:5001/user/checkUser', {username: userProfile.given_name, email: userProfile.email});
         if(!response.data.check) {
-          await axios.post("http://localhost:5001/user/register", {username: userProfile.given_name, email: userProfile.email, password: userProfile.nbf.toString()}); 
+          await axios.post("http://localhost:5001/user/register", {username: userProfile.given_name, email: userProfile.email, password: userProfile.sub.toString()}); 
           console.log("user has been registered");
         }
-        else {
-
-        }
+        try {
+          const email = userProfile.email;
+          const password = userProfile.sub;
+          const response = await axios.post('http://localhost:5001/user/login', { email, password });
+          const data = response.data;
+          if (data) {
+            console.log("User logged in successfully:", data);
+            navigate("/", {state:{user: data}});
+          } else {
+            setErrorMessage('Invalid email or password.');
+          }
+        } catch (error: any) {
+          console.error("Error during login:", error.message);
+          setErrorMessage('Something went wrong. Please try again later.');
+        } 
       } else {
         console.error('Failed to parse user profile');
       }

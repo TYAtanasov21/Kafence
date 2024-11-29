@@ -7,7 +7,6 @@ import Entypo from '@expo/vector-icons/Entypo';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import { useRoute } from '@react-navigation/native';
-
 interface MachineProps {
   long: number;
   lat: number;
@@ -17,7 +16,7 @@ interface MachineProps {
 
 export const MainScreenMobile: React.FC = () => {
   const navigation = useNavigation();
-  const route = useRoute(); // Get the route using useRoute hook
+  const route = useRoute();
   const { user } = route.params;
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [selected, setSelected] = useState<MachineProps | null>(null);
@@ -28,6 +27,8 @@ export const MainScreenMobile: React.FC = () => {
   const [machines, setMachines] = useState<MachineProps[]>();
   const [currentRating, setCurrentRating] = useState<Number>(0);
   const [currentRatingCount, setCurrentRatingCount] = useState<Number>(0);
+
+  const MarkerIcon = "https://img.icons8.com/?size=100&id=12860&format=png&color=000000"; 
 
 
   const getRating = async (machineId: number) =>{
@@ -163,8 +164,10 @@ export const MainScreenMobile: React.FC = () => {
           <Marker
             key={index}
             coordinate={{ latitude: Number(machine.lat), longitude: Number(machine.long) }}
-            pinColor='red'
             onPress={() => {handleMarkerPress(machine)}}
+            image = {{
+              uri: MarkerIcon
+            }}
           />
         ))}
         

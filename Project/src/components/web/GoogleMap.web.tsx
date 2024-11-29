@@ -5,7 +5,7 @@ import { Image } from 'react-native';
 import tailwind from 'twrnc';
 import { useNavigate } from 'react-router-dom';
 import { MarkerClusterer } from '@react-google-maps/api';
-
+import clustererOptions from '../shared/clusturerOptions';
 
 import {User} from "../shared/user";
 const mapContainerStyle = {
@@ -40,21 +40,6 @@ const GoogleMapsComponent: React.FC<GoogleMapsComponentProps> = ({user}) => {
   const [machines, setMachines] = useState<MachineProps[]>([]);
   const [currentRating, setCurrentRating] = useState<Number>(0);
   const [currentRatingCount, setCurrentRatingCount] = useState<Number>(0);
-
-  const clustererOptions = {
-    gridSize: 50, 
-    maxZoom: 15, 
-    styles: [
-      {
-        url: "https://img.icons8.com/?size=100&id=VW9mAoyk46FP&format=png&color=000000",
-        height: 40,
-        width: 40,
-        textColor: "black",
-        textSize: 12,
-      },
-    ],
-  };
-
 
   useEffect(() => {
     if (navigator.geolocation) {

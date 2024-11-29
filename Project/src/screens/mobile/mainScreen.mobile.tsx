@@ -7,7 +7,6 @@ import Entypo from '@expo/vector-icons/Entypo';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import { useRoute } from '@react-navigation/native';
-import { MarkerClusterer } from '@react-google-maps/api';
 interface MachineProps {
   long: number;
   lat: number;

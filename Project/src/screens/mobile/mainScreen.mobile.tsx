@@ -95,8 +95,6 @@ export const MainScreenMobile: React.FC = () => {
   const handleMarkerPress = async (machine: MachineProps) => {
     try {
       setSelected(machine);
-  
-      // Uncommenting this section should work if the API call is correct.
       const response = await getRating(machine.id);
       console.log(response);
   

@@ -29,8 +29,12 @@ const Register: React.FC = () => {
     const response = await axios.post("http://10.0.2.2:5001/user/register", {username: userData.name, email: userData.email, password: userData.password} );
 
     // Navigate to MainScreenMobile after successful registration (without backend)
-    navigation.navigate('MainScreenMobile');
-
+    const responseLogin = await axios.post('http://10.0.2.2:5001/user/login', { email: userData.email, password: userData.password });
+    const data = responseLogin.data;
+    if (data) {
+      console.log("User logged in successfully:", data);
+      navigation.navigate('MainScreenMobile', { user: data });
+    }
     // Reset the form
     setName('');
     setEmail('');

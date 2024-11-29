@@ -44,23 +44,6 @@ const LogIn: React.FC = () => {
       setPassword('');
     }
   };
-<<<<<<< HEAD
-  // const getUser = (user: any) => {
-  //   axios
-  //     .get('http://kafence.vercel.app/user/getUser', {
-  //       params: {
-  //         user: user,
-  //       },
-  //     })
-  //     .then((response) => {
-  //       console.log(response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error:', error);
-  //     });
-  // };
-=======
->>>>>>> a19325786255f2b8e19d95315661bd18d3c85ed3
 
   const onSuccess = async (credentialResponse: CredentialResponse) => {
     if (credentialResponse.credential) {

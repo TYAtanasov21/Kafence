@@ -28,7 +28,7 @@ const LogIn: React.FC = () => {
     }
   
     try {
-      const response = await axios.post('http://localhost:5001/user/login', { email, password });
+      const response = await axios.post('http://kafence.vercel.app/user/login', { email, password });
       const data = response.data;
       if (data) {
         console.log("User logged in successfully:", data);
@@ -44,21 +44,38 @@ const LogIn: React.FC = () => {
       setPassword('');
     }
   };
+<<<<<<< HEAD
+  // const getUser = (user: any) => {
+  //   axios
+  //     .get('http://kafence.vercel.app/user/getUser', {
+  //       params: {
+  //         user: user,
+  //       },
+  //     })
+  //     .then((response) => {
+  //       console.log(response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error:', error);
+  //     });
+  // };
+=======
+>>>>>>> a19325786255f2b8e19d95315661bd18d3c85ed3
 
   const onSuccess = async (credentialResponse: CredentialResponse) => {
     if (credentialResponse.credential) {
       const userProfile = parseJwt(credentialResponse.credential);
       if (userProfile) {
         console.log('Login Success: current user:', userProfile);
-        const response = await axios.post('http://localhost:5001/user/checkUser', {username: userProfile.given_name, email: userProfile.email});
+        const response = await axios.post('http://kafence.vercel.app/user/checkUser', {username: userProfile.given_name, email: userProfile.email});
         if(!response.data.check) {
-          await axios.post("http://localhost:5001/user/register", {username: userProfile.given_name, email: userProfile.email, password: userProfile.sub.toString()}); 
+          await axios.post("http://kafence.vercel.app/user/register", {username: userProfile.given_name, email: userProfile.email, password: userProfile.sub.toString()}); 
           console.log("user has been registered");
         }
         try {
           const email = userProfile.email;
           const password = userProfile.sub;
-          const response = await axios.post('http://localhost:5001/user/login', { email, password });
+          const response = await axios.post('http://kafence.vercel.app/user/login', { email, password });
           const data = response.data;
           if (data) {
             console.log("User logged in successfully:", data);

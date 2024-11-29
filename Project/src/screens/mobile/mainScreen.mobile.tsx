@@ -17,6 +17,7 @@ interface MachineProps {
 export const MainScreenMobile: React.FC = () => {
   const navigation = useNavigation();
   const route = useRoute();
+  const { user } = route.params;
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [selected, setSelected] = useState<MachineProps | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -31,14 +32,14 @@ export const MainScreenMobile: React.FC = () => {
 
 
   const getRating = async (machineId: number) =>{
-    const response = await axios.post("http://10.0.2.2:5001/machine/getRating", {"machineId": machineId});
+    const response = await axios.post("https://kafence.vercel.app/machine/getRating", {"machineId": machineId});
     console.log(response.data);
     return response.data;
   }
 
   const handleRatingSubmit = async () => {
     alert(`You rated this machine (${selected.name}): ${rating} stars`);
-    await axios.post("http://10.0.2.2:5001/machine/rateMachine", {"machineId": selected.id, "rating": rating, "userId": user.id});
+    await axios.post("https://kafence.vercel.app/machine/rateMachine", {"machineId": selected.id, "rating": rating, "userId": user.id});
     setRatingModalVisible(false);
   };
 
@@ -94,6 +95,8 @@ export const MainScreenMobile: React.FC = () => {
   const handleMarkerPress = async (machine: MachineProps) => {
     try {
       setSelected(machine);
+  
+      // Uncommenting this section should work if the API call is correct.
       const response = await getRating(machine.id);
       console.log(response);
   
@@ -112,7 +115,7 @@ export const MainScreenMobile: React.FC = () => {
   useEffect(() => {
     const fetchMachines = async () => {
       try {
-        const response = await axios.get('http://10.0.2.2:5001/machine/getMachines');
+        const response = await axios.get('https://kafence.vercel.app/machine/getMachines');
         const machinesArray = response.data.array;
         setMachines(machinesArray);
       } catch (error) {
@@ -196,6 +199,8 @@ export const MainScreenMobile: React.FC = () => {
           </TouchableOpacity>
         </Modal>
       )}
+
+      {/* Marker Details Modal */}
       
       <Modal
         transparent={true}

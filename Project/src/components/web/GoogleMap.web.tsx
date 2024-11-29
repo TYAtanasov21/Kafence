@@ -69,7 +69,7 @@ const GoogleMapsComponent: React.FC<GoogleMapsComponentProps> = ({user}) => {
   useEffect(() => {
     const fetchMachines = async () => {
       try {
-        const response = await axios.get('https://kafence-server.vercel.app/machine/getMachines');
+        const response = await axios.get('https://kafence.vercel.app/machine/getMachines');
         const machinesArray = response.data.array;
         setMachines(machinesArray);
       } catch (error) {
@@ -99,14 +99,14 @@ const GoogleMapsComponent: React.FC<GoogleMapsComponentProps> = ({user}) => {
   };
 
   const getRating = async (machineId: number) =>{
-    const response = await axios.post("https://kafence-server.vercel.app/machine/getRating", {"machineId": machineId});
+    const response = await axios.post("https://kafence.vercel.app/machine/getRating", {"machineId": machineId});
     console.log(response.data);
     return response.data;
   }
 
   const handleRatingSubmit = async () => {
     alert(`You rated this machine (${selected.name}): ${rating} stars`);
-    await axios.post("https://kafence-server.vercel.app/machine/rateMachine", {"machineId": selected.id, "rating": rating});
+    await axios.post("https://kafence.vercel.app/machine/rateMachine", {"machineId": selected.id, "rating": rating});
     setRatingModalVisible(false);
   };
   console.log(userLocation);

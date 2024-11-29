@@ -15,7 +15,7 @@ const AddMachineForm: React.FC = () => {
     email: '',
   });
   
-  const [submitted, setSubmitted] = useState(false); // Track submission status
+  const [submitted, setSubmitted] = useState(false);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,

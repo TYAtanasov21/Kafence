@@ -17,7 +17,6 @@ interface MachineProps {
 export const MainScreenMobile: React.FC = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const { user } = route.params;
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [selected, setSelected] = useState<MachineProps | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -95,8 +94,6 @@ export const MainScreenMobile: React.FC = () => {
   const handleMarkerPress = async (machine: MachineProps) => {
     try {
       setSelected(machine);
-  
-      // Uncommenting this section should work if the API call is correct.
       const response = await getRating(machine.id);
       console.log(response);
   
@@ -199,8 +196,6 @@ export const MainScreenMobile: React.FC = () => {
           </TouchableOpacity>
         </Modal>
       )}
-
-      {/* Marker Details Modal */}
       
       <Modal
         transparent={true}

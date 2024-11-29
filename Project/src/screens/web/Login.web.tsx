@@ -22,7 +22,6 @@ const LogIn: React.FC = () => {
     event.preventDefault();
     setErrorMessage('');
   
-    // Validate inputs
     if (!email || !password) {
       setErrorMessage('Please enter your email and password.');
       return;
@@ -45,6 +44,7 @@ const LogIn: React.FC = () => {
       setPassword('');
     }
   };
+<<<<<<< HEAD
   // const getUser = (user: any) => {
   //   axios
   //     .get('http://kafence.vercel.app/user/getUser', {
@@ -59,6 +59,8 @@ const LogIn: React.FC = () => {
   //       console.error('Error:', error);
   //     });
   // };
+=======
+>>>>>>> a19325786255f2b8e19d95315661bd18d3c85ed3
 
   const onSuccess = async (credentialResponse: CredentialResponse) => {
     if (credentialResponse.credential) {
@@ -112,10 +114,6 @@ const LogIn: React.FC = () => {
     }
     return null;
   };
-
-  // const getUserSubmit = () => {
-  //   getUser({ email: email, password: password });
-  // };
 
   return (
     <GoogleOAuthProvider clientId={client_id}>

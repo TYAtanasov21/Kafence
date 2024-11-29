@@ -16,7 +16,7 @@ const Register: React.FC = () => {
       return;
     }
 
-      const response = await axios.post("https://localhost:5001/user/register", {username: name, email: email, password: password} );
+      const response = await axios.post("https://kafence-server.vercel.app/user/register", {username: name, email: email, password: password} );
       console.log(response.data.message);
     setName('');
     setEmail('');

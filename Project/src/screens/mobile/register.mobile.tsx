@@ -26,7 +26,7 @@ const Register: React.FC = () => {
     // Local simulation: 
     const userData = { name, email, password };
     console.log('User Registered:', userData);
-    const response = await axios.post("https://kafence.vercel.app/user/register", {username: userData.name, email: userData.email, password: userData.password} );
+    const response = await axios.post("https://kafence-server.vercel.app/user/register", {username: userData.name, email: userData.email, password: userData.password} );
 
     // Navigate to MainScreenMobile after successful registration (without backend)
     navigation.navigate('MainScreenMobile');

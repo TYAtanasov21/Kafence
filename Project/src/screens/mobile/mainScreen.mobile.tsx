@@ -32,14 +32,14 @@ export const MainScreenMobile: React.FC = () => {
 
 
   const getRating = async (machineId: number) =>{
-    const response = await axios.post("https://kafence.vercel.app/machine/getRating", {"machineId": machineId});
+    const response = await axios.post("https://kafence-server.vercel.app/machine/getRating", {"machineId": machineId});
     console.log(response.data);
     return response.data;
   }
 
   const handleRatingSubmit = async () => {
     alert(`You rated this machine (${selected.name}): ${rating} stars`);
-    await axios.post("https://kafence.vercel.app/machine/rateMachine", {"machineId": selected.id, "rating": rating, "userId": user.id});
+    await axios.post("https://kafence-server.vercel.app/machine/rateMachine", {"machineId": selected.id, "rating": rating, "userId": user.id});
     setRatingModalVisible(false);
   };
 
@@ -115,7 +115,7 @@ export const MainScreenMobile: React.FC = () => {
   useEffect(() => {
     const fetchMachines = async () => {
       try {
-        const response = await axios.get('https://kafence.vercel.app/machine/getMachines');
+        const response = await axios.get('https://kafence-server.vercel.app/machine/getMachines');
         const machinesArray = response.data.array;
         setMachines(machinesArray);
       } catch (error) {

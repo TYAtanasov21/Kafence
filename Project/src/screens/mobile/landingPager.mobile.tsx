@@ -30,7 +30,7 @@ const LandingScreen: React.FC = () => {
     console.log('Email:', email);
     console.log('Password:', password);
     try {
-      const response = await axios.post('https://kafence.vercel.app/user/login', { email, password });
+      const response = await axios.post('https://kafence-server.vercel.app/user/login', { email, password });
       const data = response.data;
       if (data) {
         console.log("User logged in successfully:", data);

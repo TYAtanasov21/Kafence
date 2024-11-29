@@ -16,10 +16,8 @@ const Register: React.FC = () => {
       return;
     }
 
-    // Simulate an API call for registration
       const response = await axios.post("http://localhost:5001/user/register", {username: name, email: email, password: password} );
       console.log(response.data.message);
-    // Reset form fields
     setName('');
     setEmail('');
     setPassword('');

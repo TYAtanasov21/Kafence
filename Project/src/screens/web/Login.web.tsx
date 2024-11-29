@@ -22,7 +22,6 @@ const LogIn: React.FC = () => {
     event.preventDefault();
     setErrorMessage('');
   
-    // Validate inputs
     if (!email || !password) {
       setErrorMessage('Please enter your email and password.');
       return;
@@ -45,20 +44,6 @@ const LogIn: React.FC = () => {
       setPassword('');
     }
   };
-  // const getUser = (user: any) => {
-  //   axios
-  //     .get('http://localhost:5001/user/getUser', {
-  //       params: {
-  //         user: user,
-  //       },
-  //     })
-  //     .then((response) => {
-  //       console.log(response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error:', error);
-  //     });
-  // };
 
   const onSuccess = async (credentialResponse: CredentialResponse) => {
     if (credentialResponse.credential) {
@@ -112,10 +97,6 @@ const LogIn: React.FC = () => {
     }
     return null;
   };
-
-  // const getUserSubmit = () => {
-  //   getUser({ email: email, password: password });
-  // };
 
   return (
     <GoogleOAuthProvider clientId={client_id}>
